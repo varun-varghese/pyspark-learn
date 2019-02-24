@@ -32,17 +32,6 @@ class DfIter(object):
             yrmon = '{0}{1}'.format(filter.year, str(filter.mon).zfill(2))
             outPath = './out/as_of_date=latest/type=full/country={country}/yrmon={yrmon}'.format(country=country, yrmon=yrmon)
             filteredDf.write.csv(outPath, mode='overwrite', header='true')
-        '''
-        def WriteFilterDf(filter: Row):
-            #print('Year: %d, Month: %d, Country: %s' % (filter.year, filter.mon, filter.country))
-            filteredDf = df.filter(df.year == filter.year) \
-                .filter(df.mon == filter.mon) \
-                .filter(df.country == filter.country)
-            filteredDf.show()
-
-        dfFilter.foreach(WriteFilterDf)
-        '''
-        #df.write.partitionBy('country', 'year', 'mon').mode('overwrite').format('csv').save('./out/as_of_date=latest/type=full/')
         df.unpersist()
 
 if __name__ == '__main__':
