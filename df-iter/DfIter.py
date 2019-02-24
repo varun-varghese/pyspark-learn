@@ -19,15 +19,19 @@ class DfIter(object):
         #df.printSchema()
         #df.show()
 
-        dfFilter = df.select('year', 'mon', 'country').distinct().collect()
+        dfFilter = df.select('rpt_cty', 'year', 'mon').distinct().collect()
         self.spark.sparkContext.broadcast(dfFilter)
         #dfFilter.show()
 
         for filter in dfFilter:
-            filteredDf = df.filter(df.year == filter.year) \
-                .filter(df.mon == filter.mon) \
-                .filter(df.country == filter.country)
-            filteredDf.show()
+            filteredDf = df.filter(df.rpt_cty == filter.rpt_cty) \
+                .filter(df.year == filter.year) \
+                .filter(df.mon == filter.mon)
+            #filteredDf.show()
+            country = str(filter.rpt_cty).replace(' ', '_')
+            yrmon = '{0}{1}'.format(filter.year, str(filter.mon).zfill(2))
+            outPath = './out/as_of_date=latest/type=full/country={country}/yrmon={yrmon}'.format(country=country, yrmon=yrmon)
+            filteredDf.write.csv(outPath, mode='overwrite', header='true')
         '''
         def WriteFilterDf(filter: Row):
             #print('Year: %d, Month: %d, Country: %s' % (filter.year, filter.mon, filter.country))
