@@ -19,8 +19,9 @@ class DfIter(object):
         #df.show()
 
         from pyspark.sql.functions import concat, regexp_replace, format_string, format_number
-        df.withColumn('country', regexp_replace(df.rpt_cty, ' ', '_')) \
+        df.withColumn('country', regexp_replace(df.rpt_cty, "[ ,/,\\\]", '_')) \
             .withColumn('yrmon', concat(df.year, format_string('%02d', df.mon))) \
+            .repartition('country', 'yrmon') \
             .write.partitionBy('country', 'yrmon') \
             .option('header', 'true') \
             .mode('overwrite') \

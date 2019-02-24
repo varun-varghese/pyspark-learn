@@ -1,3 +1,4 @@
 out
 .part*
 part*
+*.pickle
