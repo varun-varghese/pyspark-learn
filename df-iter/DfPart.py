@@ -7,7 +7,7 @@ from pyspark.sql import SparkSession, DataFrame, Row
 
 
 class DfIter(object):
-    '''Dataframe foreach test'''
+    '''Dataframe write test with partitions'''
 
     def __init__(self, appName: str):
         self.spark = SparkSession.builder.master('local').appName(appName).getOrCreate()
